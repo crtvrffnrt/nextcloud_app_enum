@@ -1,0 +1,251 @@
+id: nextcloud-anonymous-app-enumeration
+
+info:
+  name: Nextcloud anonymous app fingerprints
+  author: local-audit
+  severity: info
+  description: Public capabilities indicate enabled providers; static assets indicate files only, not enablement. Missing matches do not mean an app is absent.
+  tags: nextcloud,tech,enumeration
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/ocs/v2.php/cloud/capabilities?format=json"
+    headers:
+      OCS-APIRequest: "true"
+      Accept: application/json
+    redirects: false
+    matchers-condition: or
+    matchers:
+      - type: dsl
+        name: capability-bookmarks
+        dsl:
+          - 'status_code == 200 && contains(content_type, "application/json") && regex("\"bookmarks\"\\s*:", body) && contains(body, "capabilities")'
+      - type: dsl
+        name: capability-calendar
+        dsl:
+          - 'status_code == 200 && contains(content_type, "application/json") && regex("\"calendar\"\\s*:", body) && contains(body, "capabilities")'
+      - type: dsl
+        name: capability-cookbook
+        dsl:
+          - 'status_code == 200 && contains(content_type, "application/json") && regex("\"cookbook\"\\s*:", body) && contains(body, "capabilities")'
+      - type: dsl
+        name: capability-theming
+        dsl:
+          - 'status_code == 200 && contains(content_type, "application/json") && regex("\"theming\"\\s*:", body) && contains(body, "capabilities")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/bookmarks/js/bookmarks-vendors-node_modules_rehype-highlight_index_js.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-bookmarks-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "javascript") && len(body) > 100'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/bookmarks/js/bookmarks-vendors-node_modules_rehype-highlight_index_js.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-bookmarks-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "javascript") && len(body) > 100'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/calendar/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-calendar-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/calendar/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-calendar-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/contacts/img/clone.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-contacts-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/contacts/img/clone.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-contacts-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/cookbook/img/favicon-api.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-cookbook-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/cookbook/img/favicon-api.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-cookbook-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/deck/img/notifications-dark.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-deck-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/deck/img/notifications-dark.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-deck-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/forms/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-forms-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/forms/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-forms-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/mail/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-mail-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/mail/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-mail-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/news/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-news-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/news/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-news-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/notes/img/badge_playstore.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-notes-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/notes/img/badge_playstore.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-notes-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/polls/img/app.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-polls-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/polls/img/app.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-polls-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/tasks/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-tasks-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/tasks/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-tasks-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/richdocuments/img/x-office-presentation.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-richdocuments-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/richdocuments/img/x-office-presentation.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-richdocuments-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
