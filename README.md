@@ -4,7 +4,7 @@ Identify Nextcloud app fingerprints from public endpoints and static assets. Onl
 
 ## Python
 
-Requires Python 3; no third-party packages are needed.
+Requires Python 3
 
 ```bash
 python3 nextcloud_app_enum.py https://example.com/nextcloud
@@ -19,6 +19,7 @@ With Nuclei installed, run:
 
 ```bash
 nuclei -u https://example.com/nextcloud -t nextcloud-app-enum.yaml
+nuclei -u https://example.com/nextcloud -t nextcloud-app-enum-version.yaml
 ```
 
 Capability matches indicate enabled providers. An app-list match does not establish enabled state; an asset match only shows that a file is accessible. Missing matches do not prove an app is absent. The Nuclei template checks a smaller set of fingerprints than the Python script.
