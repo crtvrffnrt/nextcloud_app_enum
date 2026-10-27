@@ -1,0 +1,566 @@
+id: nextcloud-app-enumeration-version-baselines
+
+info:
+  name: Nextcloud app fingerprints and observed version baselines
+  author: local-audit
+  severity: info
+  description: Public capabilities indicate enabled providers; static assets indicate files only. Version fingerprints identify assets observed in one installation, not definitive app versions or enabled state.
+  tags: nextcloud,tech,enumeration
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/ocs/v2.php/cloud/capabilities?format=json"
+    headers:
+      OCS-APIRequest: "true"
+      Accept: application/json
+    redirects: false
+    matchers-condition: or
+    matchers:
+      - type: dsl
+        name: capability-bookmarks
+        dsl:
+          - 'status_code == 200 && contains(content_type, "application/json") && regex("\"bookmarks\"\\s*:", body) && contains(body, "capabilities")'
+      - type: dsl
+        name: capability-calendar
+        dsl:
+          - 'status_code == 200 && contains(content_type, "application/json") && regex("\"calendar\"\\s*:", body) && contains(body, "capabilities")'
+      - type: dsl
+        name: capability-cookbook
+        dsl:
+          - 'status_code == 200 && contains(content_type, "application/json") && regex("\"cookbook\"\\s*:", body) && contains(body, "capabilities")'
+      - type: dsl
+        name: capability-theming
+        dsl:
+          - 'status_code == 200 && contains(content_type, "application/json") && regex("\"theming\"\\s*:", body) && contains(body, "capabilities")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/bookmarks/js/bookmarks-vendors-node_modules_rehype-highlight_index_js.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-bookmarks-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "javascript") && len(body) > 100'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/bookmarks/js/bookmarks-vendors-node_modules_rehype-highlight_index_js.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-bookmarks-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "javascript") && len(body) > 100'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/calendar/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-calendar-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/calendar/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-calendar-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/contacts/img/clone.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-contacts-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/contacts/img/clone.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-contacts-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/cookbook/img/favicon-api.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-cookbook-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/cookbook/img/favicon-api.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-cookbook-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/deck/img/notifications-dark.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-deck-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/deck/img/notifications-dark.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-deck-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/forms/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-forms-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/forms/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-forms-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/mail/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-mail-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/mail/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-mail-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/news/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-news-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/news/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-news-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/notes/img/badge_playstore.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-notes-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/notes/img/badge_playstore.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-notes-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/polls/img/app.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-polls-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/polls/img/app.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-polls-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/tasks/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-tasks-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/tasks/img/favicon.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-tasks-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/richdocuments/img/x-office-presentation.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-richdocuments-custom_apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/richdocuments/img/x-office-presentation.svg"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: asset-richdocuments-apps
+        dsl:
+          - 'status_code == 200 && contains(content_type, "svg") && contains(body, "<svg")'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/activity/js/activity-sidebar.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-activity-8-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "becf3e35d73f0d0c5dfef292ddb910868b27210fd7bc41cd5be7c4f53ec6744a"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/bookmarks/js/bookmarks-references.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-bookmarks-17-0-1
+        dsl:
+          - 'status_code == 200 && sha256(body) == "a6cfa5abd9c4f0ef092defc45630f75f3645ee436b1496c15d85f6c3a55b29ae"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/bruteforcesettings/js/bruteforcesettings-main.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-bruteforcesettings-8-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "657d4b348aea76632707031aaf12581d4c8f2609f575e908c2701d6e7bd54f8c"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/calendar/js/calendar-defaultVendors-src_views_Calendar_vue.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-calendar-6-6-4
+        dsl:
+          - 'status_code == 200 && sha256(body) == "e9cb9d4e02c2dd96206fb5a9d98a7fa543d25014d81bf74fe6496439cc3ca062"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/circles/js/teams-main.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-circles-35-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "a972ebcce6b6b10f02cdc28686647c2691e8beed275b8f18c0f3403906dc9ee9"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/contacts/js/contacts-main.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-contacts-8-9-2
+        dsl:
+          - 'status_code == 200 && sha256(body) == "a94967ca00fa5d3bd9f42b78ee258baab0665f2ace713cff4a18e2cd06b7e17b"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/cookbook/js/cookbook-main.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-cookbook-0-11-12
+        dsl:
+          - 'status_code == 200 && sha256(body) == "63347c6278e0af278db139a393596dc4a5570d27def41f9a2480545f0a1b5410"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/deck/js/deck-src_views_BoardReferenceWidget_vue.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-deck-1-19-1
+        dsl:
+          - 'status_code == 200 && sha256(body) == "f8de4d5eac72b576fd5657f507f711c7b96a006251f1037e8c8ffd8913362ff7"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/files_downloadlimit/js/files_downloadlimit-main.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-files_downloadlimit-5-3-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "3759741c46e458961ea54995b6246792fdff6d7f1d6166c0cadb0d65e9d927eb"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/files_lock/js/files_lock-main.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-files_lock-35-0-1
+        dsl:
+          - 'status_code == 200 && sha256(body) == "7fb0019646f32deec74e7cede65bf4d878617f77a540e3363fe77131a77a6b67"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/files_pdfviewer/js/files_pdfviewer-main.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-files_pdfviewer-8-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "f98d47b811bf0e10f0541e4ec4c52d8cd6dd7b1b298e5c7422827d59e2a34319"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/firstrunwizard/js/firstrunwizard-settings.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-firstrunwizard-8-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "7d0c0d8fce71dff55cbd93f2ed9780f2283bc3bd83de82da16bc315b135fe820"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/forms/js/forms-main.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-forms-5-4-1
+        dsl:
+          - 'status_code == 200 && sha256(body) == "8e95baefdab2f0fd47055bda55ae267432180af0517b78e3774c5503f9cceb92"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/logreader/js/logreader-main.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-logreader-8-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "48db321c87741423b81761c6815e83a47db35a396c94f624cf49c4416b3afee4"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/mail/js/mail.2803.29abfc1efd368b07a996.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-mail-5-12-6
+        dsl:
+          - 'status_code == 200 && sha256(body) == "ce6217554f6c6e73c20632cbb0f47a5e2ddb5c14be0de9e6f3fc71a7509d07e3"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/news/js/news-main.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-news-29-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "51023607128372ed1a7353873022125af95c483f67beacc7206aed52249b75dd"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/notes/js/notes-dashboard-lazy.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-notes-6-1-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "badbaf42032b22f1f0a8d213fc4ed4dcb3f64a0c78ce47798bd678bb8db1ba51"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/notifications/js/notifications-settings.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-notifications-8-0-1
+        dsl:
+          - 'status_code == 200 && sha256(body) == "34a6161f30a17bb5022a61b8bd3f15e775efc262fe3f63061432c1894ba610be"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/office/js/office-main.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-office-1-1-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "421997de27507f2b90383eaa9d2bb3c3d3ad2a6f1f4e13794cd9821040106d19"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/password_policy/js/password_policy-settings.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-password_policy-7-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "1f993512e01c820ad6b991ac7ab66145f5419b9b88877ac9541907c3ac13295d"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/photos/js/photos-main.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-photos-8-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "546c860a49418f5299b6ca8c5ed312b827412b101171952ded1279626863cfc2"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/polls/js/main-DeuYkxyp.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-polls-9-3-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "dd461030c6ddd79d8abbfac7370958a61525a7d54497c73f905cdd2689bfa2b0"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/privacy/js/privacy-main.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-privacy-7-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "8b370e43af606daafa6546c204dbce4201ab7a1c6ec13451750aeeeeafec9abc"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/recommendations/js/recommendations-dashboard.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-recommendations-8-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "9b32abec39a8c6095d778b5732b2a3f41a7d996bcf3fee2bb1775f5b256eacd8"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/related_resources/js/related_resources.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-related_resources-6-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "a696cebe4946b4b4d1a1cd9e2745d12ce5888f12e03ca8e084a46e8b0d974800"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/richdocuments/js/richdocuments-document.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-richdocuments-12-0-1
+        dsl:
+          - 'status_code == 200 && sha256(body) == "abb7b92b4f928752f73f64cc00e39d5b3f28665e1eb6c9f904d3697964398f2c"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/serverinfo/js/serverinfo-main.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-serverinfo-7-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "1b7845c83fbd8877074fd457e021c1094068e0048d7c04b47e5c2896199a17cb"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/support/js/admin.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-support-7-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "07c2a378025d38e2c0c88b3faeb0a804b03f5b27058726fcd00ff899294b3cfe"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/survey_client/js/admin.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-survey_client-7-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "8826f457eaafb13bc67f0ffe275ceb9d431445e82419c655bd5eb3d9c695aeb8"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/custom_apps/tasks/js/tasks-main.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-tasks-0-18-1
+        dsl:
+          - 'status_code == 200 && sha256(body) == "7ad15648d56d61bf75ca4396fab8feba9e4babc6e33647722ae0ddc2d96072d9"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/text/js/text-editor.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-text-9-0-1
+        dsl:
+          - 'status_code == 200 && sha256(body) == "4200996d2683f17e56d90a99b09609c173e201eb0cc5a293fba554ebf793d99f"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/twofactor_nextcloud_notification/js/twofactor_nextcloud_notification-settings.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-twofactor_nextcloud_notification-9-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "7d7e1b91f4785738f066ed42e7ca34b184675f9fd20f32a7fb3d5ddcd4e86848"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/twofactor_totp/js/twofactor_totp-main-settings.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-twofactor_totp-17-1-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "69390c68ba897ad68bcfe52397fe5b40b3cf683e490a4789d2504566bdcc7740"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/viewer/js/viewer-init.mjs"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-viewer-8-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "0f4c196bce1b2e5f5e67367e4d2ca6fb8049a18df2a2c63c3bcd745594e81938"'
+  - method: GET
+    path:
+      - "{{BaseURL}}/apps/app_api/js/app_api-adminSettings.js"
+    redirects: false
+    matchers:
+      - type: dsl
+        name: baseline-app_api-35-0-0
+        dsl:
+          - 'status_code == 200 && sha256(body) == "5508ab92442287dc80d33fb81fc0dbcbe89bb80b787f742bafd062308ca9902e"'
